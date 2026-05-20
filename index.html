@@ -25,12 +25,12 @@
     position: relative;
     cursor: default;
     user-select: none;
-  } 
+  }
 
   body::before {
     content: ''; position: absolute; inset: 0;
     background: rgba(0,0,0,0.05);
-    pointer-events: none; z-index: 0; 
+    pointer-events: none; z-index: 0;
   }
 
   /* MENU BAR */
@@ -52,20 +52,10 @@
   .menubar-right { display: flex; align-items: center; gap: 14px; }
   .menubar-right span { color: #333; }
   #clock { font-weight: 500; }
-  
-  /* Bouton Centre de contrôle (SVG) */
-  .control-center-btn {
-    display: flex; align-items: center; justify-content: center; 
-    width: 20px; height: 20px; cursor: pointer; border-radius: 4px; margin-right: 4px;
-  }
+  .control-center-btn { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; cursor: pointer; border-radius: 4px; margin-right: 4px; }
   .control-center-btn:hover { background: rgba(0,0,0,0.1); }
   .cc-svg { width: 18px; height: 18px; fill: #333; }
-
-  /* Loupe (SVG) */
-  .search-icon {
-    width: 14px; height: 14px; fill: #333; 
-    display: flex; align-items: center; justify-content: center;
-  }
+  .search-icon { width: 14px; height: 14px; fill: #333; display: flex; align-items: center; justify-content: center; }
   .search-icon svg { width: 100%; height: 100%; }
 
   /* DESKTOP */
@@ -111,6 +101,20 @@
   .todo-footer { margin-top: 20px; padding: 12px; background: rgba(174,183,132,0.08); border-radius: 10px; font-size: 12px; color: #555; line-height: 1.5; border: 1px solid rgba(174,183,132,0.2); }
   .todo-footer strong { color: var(--brown); }
 
+  /* NOTES */
+  #win-notes { left: 15%; top: 12%; width: 750px; height: 500px; }
+  .notes-layout { display: flex; height: 100%; }
+  .notes-sidebar { width: 200px; background: rgba(245,240,232,0.6); border-right: 1px solid rgba(174,183,132,0.2); padding: 10px; overflow-y: auto; }
+  .notes-list-item { padding: 10px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #333; transition: background 0.2s; }
+  .notes-list-item:hover { background: rgba(0,0,0,0.05); }
+  .notes-list-item.active { background: rgba(174,183,132,0.3); }
+  .notes-list-item strong { display: block; font-weight: 600; margin-bottom: 4px; }
+  .notes-list-item small { color: #888; font-size: 11px; }
+  .notes-editor { flex: 1; padding: 20px 30px; background: #fff; overflow-y: auto; display: flex; flex-direction: column; }
+  .notes-editor h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #333; margin-bottom: 15px; }
+  .notes-editor textarea { flex: 1; width: 100%; border: none; resize: none; font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.5; color: #333; outline: none; }
+  .notes-editor textarea::placeholder { color: #aaa; }
+
   /* FINDER */
   #win-finder { left: 10%; top: 15%; width: 600px; height: 400px; }
   .finder-layout { display: flex; height: 100%; }
@@ -128,61 +132,29 @@
   .folder-name[contenteditable="true"] { background: #cce0ff; padding: 1px 4px; cursor: text; }
   .folder-desc { font-size: 10px; color: #777; margin-top: 2px; }
 
-  /* FENÊTRE NOTES */
-  #win-notes { left: 15%; top: 12%; width: 750px; height: 500px; }
-  .notes-layout { display: flex; height: 100%; }
-  .notes-sidebar {
-    width: 200px;
-    background: rgba(245,240,232,0.6);
-    border-right: 1px solid rgba(174,183,132,0.2); 
-    padding: 10px;
-    overflow-y: auto;
+  /* FENÊTRE CV PDF */
+  #win-cv { left: 50%; top: 50px; transform: translateX(-50%); width: 720px; height: 560px; }
+  .cv-content { flex: 1; display: flex; flex-direction: column; background: #f0f0f0; }
+  .cv-toolbar {
+    display: flex; align-items: center; justify-content: flex-end;
+    padding: 8px 14px; background: rgba(240,240,240,0.8);
+    border-bottom: 1px solid rgba(0,0,0,0.08); gap: 10px;
   }
-  .notes-list-item {
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #333;
-    transition: background 0.2s;
+  .cv-download-btn {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--brown); color: white;
+    border: none; border-radius: 8px;
+    padding: 6px 14px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    text-decoration: none; transition: opacity 0.2s;
   }
-  .notes-list-item:hover { background: rgba(0,0,0,0.05); }
-  .notes-list-item.active { background: rgba(174,183,132,0.3); }
-  .notes-list-item strong { display: block; font-weight: 600; margin-bottom: 4px; }
-  .notes-list-item small { color: #888; font-size: 11px; }
-  .notes-editor {
-    flex: 1;
-    padding: 20px 30px;
-    background: #fff;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-  }
-  .notes-editor h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #333; margin-bottom: 15px; }
-  .notes-editor textarea {
-    flex: 1;
-    width: 100%;
-    border: none;
-    resize: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.5;
-    color: #333;
-    outline: none;
-  }
-  .notes-editor textarea::placeholder { color: #aaa; }
+  .cv-download-btn:hover { opacity: 0.85; }
+  .cv-frame { flex: 1; width: 100%; border: none; background: #f0f0f0; }
 
   /* FENÊTRE MÉDIA */
   #win-media { left: 18%; top: 8%; width: 700px; height: 480px; }
   .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 20px; overflow-y: auto; flex: 1; background: #fafafa; align-content: start; }
-  .media-thumb {
-    border-radius: 10px; overflow: hidden; cursor: pointer;
-    background: #eee; aspect-ratio: 1;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; transition: transform 0.15s;
-    border: 1px solid rgba(0,0,0,0.07);
-  }
+  .media-thumb { border-radius: 10px; overflow: hidden; cursor: pointer; background: #eee; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.15s; border: 1px solid rgba(0,0,0,0.07); }
   .media-thumb:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
   .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
   .play-overlay { position: absolute; font-size: 28px; background: rgba(0,0,0,0.45); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: white; }
@@ -190,26 +162,14 @@
   .media-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 
   /* LIGHTBOX */
-  #lightbox {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.88); z-index: 9999;
-    align-items: center; justify-content: center;
-  }
+  #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 9999; align-items: center; justify-content: center; }
   #lightbox.open { display: flex; }
   #lightbox-close { position: absolute; top: 18px; right: 28px; color: #fff; font-size: 30px; cursor: pointer; line-height: 1; z-index: 10000; }
   #lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 10px; display: none; object-fit: contain; }
   #lightbox-vid { max-width: 90vw; max-height: 85vh; border-radius: 10px; display: none; }
 
   /* MENU CONTEXTUEL */
-  #context-menu {
-    display: none; position: fixed;
-    background: rgba(246,246,246,0.97);
-    border: 1px solid rgba(0,0,0,0.14);
-    border-radius: 10px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
-    z-index: 9998; min-width: 185px; padding: 4px 0;
-    font-size: 13px; font-family: 'SF Pro Display',-apple-system,sans-serif;
-  }
+  #context-menu { display: none; position: fixed; background: rgba(246,246,246,0.97); border: 1px solid rgba(0,0,0,0.14); border-radius: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.22); z-index: 9998; min-width: 185px; padding: 4px 0; font-size: 13px; font-family: 'SF Pro Display',-apple-system,sans-serif; }
   .ctx-item { padding: 7px 16px; cursor: pointer; color: #1a1a1a; }
   .ctx-item:hover { background: rgba(0,100,255,0.1); }
   .ctx-sep { height: 1px; background: rgba(0,0,0,0.1); margin: 3px 0; }
@@ -218,37 +178,12 @@
   .desktop-icons { position: absolute; right: 20px; top: 60px; display: flex; flex-direction: column; gap: 20px; z-index: 50; align-items: center; }
   .desktop-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; width: 70px; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
   .desktop-icon:hover .icon-img { transform: scale(1.05); }
-  
-  .icon-img { 
-    width: 58px; height: 58px; 
-    border-radius: 14px; 
-    display: flex; align-items: center; justify-content: center; 
-    font-size: 28px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
-    transition: transform 0.2s; 
-    background: none; 
-    overflow: hidden; 
-  }
-  
-  .icon-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    border-radius: 14px;
-  }
-
+  .icon-img { width: 58px; height: 58px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: transform 0.2s; background: none; overflow: hidden; }
+  .icon-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
   .icon-label { font-size: 11px; color: #fff; text-align: center; font-weight: 500; }
 
   /* DOCK */
-  .dock {
-    position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
-    background: rgba(255,255,255,0.4);
-    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 24px; padding: 10px 14px;
-    display: flex; align-items: center; gap: 10px;
-    z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-  }
+  .dock { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.4); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.3); border-radius: 24px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.25); }
   .dock-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; transition: transform 0.2s; }
   .dock-item:hover { transform: scale(1.15) translateY(-8px); }
   .dock-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); overflow: hidden; }
@@ -273,13 +208,11 @@
     </div>
   </div>
   <div class="menubar-right">
-    <!-- Centre de contrôle SVG (Ouvre les Notes) -->
-    <div class="control-center-btn" onclick="openWindow('win-notes')" title="Centre de contrôle">
+    <div class="control-center-btn" onclick="openWindow('win-notes')" title="Notes">
       <svg class="cc-svg" viewBox="0 0 24 24">
         <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2M12,8C10.9,8 10,8.9 10,10C10,11.1 10.9,12 12,12C13.1,12 14,11.1 14,10C14,8.9 13.1,8 12,8M12,14C10.9,14 10,14.9 10,16C10,17.1 10.9,18 12,18C13.1,18 14,17.1 14,16C14,14.9 13.1,14 12,14Z" />
       </svg>
     </div>
-    <!-- Loupe SVG -->
     <div class="search-icon" title="Recherche">
       <svg viewBox="0 0 24 24">
         <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
@@ -315,7 +248,7 @@
     </div>
   </div>
 
-  <!-- NOTES WINDOW (NOUVEAU) -->
+  <!-- NOTES WINDOW -->
   <div class="window" id="win-notes">
     <div class="titlebar">
       <div class="dots">
@@ -328,28 +261,22 @@
     </div>
     <div class="notes-layout">
       <div class="notes-sidebar">
-        <div class="notes-list-item active" onclick="selectNote(0)"> 
-          <strong>Lettre de motivation </strong>
+        <div class="notes-list-item active" onclick="selectNote(0)">
+          <strong>Lettre de motivation</strong>
           <small>Aujourd'hui, 10:00</small>
         </div>
         <div class="notes-list-item" onclick="selectNote(1)">
           <strong>Livres que j'aime</strong>
-          <small>Hier, 14:30</small> 
+          <small>Hier, 14:30</small>
         </div>
         <div class="notes-list-item" onclick="selectNote(2)">
           <strong>Coup de boost</strong>
-          <small>20 mai 2025</small>
-        </div> 
+          <small>16 mai 2026</small>
+        </div>
       </div>
       <div class="notes-editor">
-        <h2 id="note-title">Lettre de motivation </h2>
-        <textarea id="note-content" oninput="updateNoteContent(this.value)">
-J'ai toujours été créative dès le plus jeune âge. D'abord une école d'informatique puis d'économie mais je ne me sentais pas à ma place. Au fil des années, j'ai appris à faire du montage vidéo, créer des sites, toucher à l'animation 3D etc. En août, j'apprends le SEO. 
-
-C'était donc évident, je me devais d'aller en marketing. J'ai eu l'occassion de mettre en application toutes ces compétences mais aussi d'en acquérir d'autres lors de mon stage: indexation de pages, refonte de site, analyse de performange, création d'articles de blog et j'en passe. 
-
-Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale ainsi que mes projets. 
-        </textarea>
+        <h2 id="note-title">Lettre de motivation</h2>
+        <textarea id="note-content" oninput="updateNoteContent(this.value)"></textarea>
       </div>
     </div>
   </div>
@@ -376,6 +303,29 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
     </div>
   </div>
 
+  <!-- FENÊTRE CV PDF ← NOUVEAU -->
+  <div class="window" id="win-cv">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red" onclick="closeWindow('win-cv')"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="window-title">Mon CV</div>
+      <div style="width:42px"></div>
+    </div>
+    <div class="cv-content">
+      <div class="cv-toolbar">
+        <!-- Bouton télécharger -->
+        <a class="cv-download-btn" href="cv.pdf" download>
+          ⬇︎ Télécharger
+        </a>
+      </div>
+      <!-- ↓ Le PDF s'affiche ici. Ton fichier doit s'appeler "cv.pdf" sur GitHub -->
+      <iframe class="cv-frame" src="cv.pdf" title="CV Nour"></iframe>
+    </div>
+  </div>
+
   <!-- FENÊTRE MÉDIA -->
   <div class="window" id="win-media">
     <div class="titlebar">
@@ -390,29 +340,19 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
     <div class="media-grid" id="media-content"></div>
   </div>
 
-  <!-- DESKTOP ICONS (PAS DE NOTE ICI) -->
+  <!-- DESKTOP ICONS -->
   <div class="desktop-icons">
-    <!-- Icône Rappel -->
     <div class="desktop-icon" ondblclick="openWindow('win-todo')">
-      <div class="icon-img">
-        <img src="https://i.pinimg.com/736x/0e/72/b8/0e72b856f364f2d69422c01f1b594ea6.jpg" alt="Rappel">
-      </div>
+      <div class="icon-img"><img src="https://i.pinimg.com/736x/0e/72/b8/0e72b856f364f2d69422c01f1b594ea6.jpg" alt="Rappel"></div>
       <div class="icon-label">Rappel</div>
     </div>
-    
-    <!-- Icône Mes Projets -->
     <div class="desktop-icon" ondblclick="openWindow('win-finder')">
-      <div class="icon-img">
-        <img src="https://i.pinimg.com/736x/7a/4f/30/7a4f300957d3e50ad5c4a448eba8843b.jpg" alt="Projets">
-      </div>
+      <div class="icon-img"><img src="https://i.pinimg.com/736x/7a/4f/30/7a4f300957d3e50ad5c4a448eba8843b.jpg" alt="Projets"></div>
       <div class="icon-label">Mes<br>Projets</div>
-    </div> 
-
-    <!-- Icône CV -->
-    <div class="desktop-icon">
-      <div class="icon-img">
-        <img src="https://i.imgur.com/vK022ow_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="CV">
-      </div>
+    </div>
+    <!-- ↓ Double-clic ouvre la fenêtre CV -->
+    <div class="desktop-icon" ondblclick="openWindow('win-cv')">
+      <div class="icon-img"><img src="https://i.imgur.com/vK022ow_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="CV"></div>
       <div class="icon-label">CV</div>
     </div>
   </div>
@@ -431,7 +371,7 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
   <div class="ctx-item" onclick="ctxOpen()">📂 &nbsp;Ouvrir</div>
   <div class="ctx-sep"></div>
   <div class="ctx-item" onclick="ctxRename()">✏️ &nbsp;Renommer</div>
-</div> 
+</div>
 
 <!-- DOCK -->
 <div class="dock">
@@ -447,7 +387,6 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
     <div class="dock-icon"><img src="https://i.imgur.com/RFDkqAZ.jpeg" alt="FaceTime"></div>
     <div class="dock-tooltip">FaceTime</div>
   </div>
-  <!-- CORRECTION ICI : Ajout de ondblclick="openWindow('win-notes')" -->
   <div class="dock-item" ondblclick="openWindow('win-notes')">
     <div class="dock-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_Notes_icon.svg/3840px-Apple_Notes_icon.svg.png" alt="Notes"></div>
     <div class="dock-tooltip">Notes</div>
@@ -460,7 +399,7 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
     <div class="dock-icon"><img src="https://i.imgur.com/k0HwEH0.png" alt="Chrome"></div>
     <div class="dock-tooltip">Chrome</div>
   </div>
-  <div class="dock-item"> 
+  <div class="dock-item">
     <div class="dock-icon" style="background:#0a66c2;color:white;font-weight:bold;font-size:20px;">in</div>
     <div class="dock-tooltip">LinkedIn</div>
   </div>
@@ -479,24 +418,26 @@ Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale
 // DONNÉES DES PROJETS
 // ══════════════════════════════════════════════════════
 const projectsData = [
-  { 
+  {
     icon: "🧸",
     title: "Tanddem",
     desc: "SEO & Rebranding",
     medias: [
-      { type: "image", src: "https://i.imgur.com/eGqtyWt_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Hero: Avant rebranding" },
-      { type: "image", src: "https://i.imgur.com/imITECt_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Nos services: Avant rebranding" },
-      { type: "image", src: "https://i.imgur.com/1EHCUka_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Hero: Après rebranding" },
-      { type: "image", src: "https://i.imgur.com/5LVv34k_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Nos services: Après rebranding" },
-      { type: "video", src: "https://i.imgur.com/KBqxTtl_lq.mp4",  label: "Responsive site internet mobile " },
+      { type: "image", src: "https://i.imgur.com/eGqtyWt_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Hero: Avant rebranding" },
+      { type: "image", src: "https://i.imgur.com/imITECt_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Nos services: Avant rebranding" },
+      { type: "image", src: "https://i.imgur.com/1EHCUka_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Hero: Après rebranding" },
+      { type: "image", src: "https://i.imgur.com/5LVv34k_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Nos services: Après rebranding" },
+      { type: "video", src: "https://i.imgur.com/KBqxTtl_lq.mp4", label: "Responsive site internet mobile" },
     ]
   },
   {
-    icon: "🌸", 
+    icon: "🌸",
     title: "Mademoiselle Musc",
     desc: "Shopify Design",
     medias: [
-      { type: "video", src: "https://i.imgur.com/WWLNEEs_lq.mp4",  label: "Démo mobile" }, 
+      { type: "image", src: "https://i.imgur.com/WQvQGDG_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "Musc" },
+      { type: "image", src: "https://i.imgur.com/qJuFW9m_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "Musc" },
+      { type: "video", src: "https://i.imgur.com/WWLNEEs_lq.mp4", label: "Démo mobile" },
     ]
   },
   {
@@ -508,16 +449,16 @@ const projectsData = [
       { type: "image", src: "https://i.imgur.com/yYEb9G6_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "Coming soon" },
       { type: "image", src: "https://i.imgur.com/rHNsQWo_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Customer's choice" },
       { type: "image", src: "https://i.imgur.com/Sb3esJ0_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Get the look" },
-      { type: "image", src: "https://i.imgur.com/5sZQbuW_d.png?maxwidth=520&shape=thumb&fidelity=highh", label: "EVJF summer" },
-      { type: "image", src: "https://i.imgur.com/D0l5jmB_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "EVJF chrome " },
+      { type: "image", src: "https://i.imgur.com/5sZQbuW_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "EVJF summer" },
+      { type: "image", src: "https://i.imgur.com/D0l5jmB_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "EVJF chrome" },
       { type: "image", src: "https://i.imgur.com/dSL2cdi_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Babyshower" },
       { type: "image", src: "https://i.imgur.com/CIfF1po_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Baptême" },
       { type: "video", src: "https://i.imgur.com/Lph2FeQ_lq.mp4", label: "Projet fictif" },
       { type: "video", src: "https://i.imgur.com/1LRtj5K_lq.mp4", label: "Huda Beauty" },
-      { type: "video", src: "https://i.imgur.com/nOma0SA_lq.mp4", label: "Invitation maroc " }, 
-      { type: "video", src: "https://i.imgur.com/lWAfR4b_lq.mp4", label: "Invitation tunisie " }, 
-      { type: "video", src: "https://i.imgur.com/oRbRKBR_lq.mp4", label: "Invitation henna day " }, 
-      { type: "video", src: "https://i.imgur.com/ZBitM59_lq.mp4", label: "Invitation florale " }, 
+      { type: "video", src: "https://i.imgur.com/nOma0SA_lq.mp4", label: "Invitation maroc" },
+      { type: "video", src: "https://i.imgur.com/lWAfR4b_lq.mp4", label: "Invitation tunisie" },
+      { type: "video", src: "https://i.imgur.com/oRbRKBR_lq.mp4", label: "Invitation henna day" },
+      { type: "video", src: "https://i.imgur.com/ZBitM59_lq.mp4", label: "Invitation florale" },
     ]
   }
 ];
@@ -526,26 +467,38 @@ const projectsData = [
 // DONNÉES DES NOTES
 // ══════════════════════════════════════════════════════
 const notesData = [
-  { title: "Lettre de motivation", content: "J'ai toujours été créative dès le plus jeune âge. D'abord une école d'informatique puis d'économie mais je ne me sentais pas à ma place. Au fil des années, j'ai appris à faire du montage vidéo, créer des sites, toucher à l'animation 3D etc. En août, j'apprends le SEO. C'était donc évident, je me devais d'aller en marketing. J'ai eu l'occassion de mettre en application toutes ces compétences mais aussi d'en acquérir d'autres lors de mon stage: indexation de pages, refonte de site, analyse de performange, création d'articles de blog et j'en passe. Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale ainsi que mes projets. " },
-  { title: "Livres que j'aime", content: "- L'art subtil de s'en foutre\n- Don't believe everything you think\n- Atomic Habits\n- Arrêtez de vous saboter, vous êtes exceptionnel !" },
-  { title: "Coup de boost", content: "-La douleur est indissociable de l'apprentissage.\n- Croire en soi, c'est déjà presque réussir.\n- Même la nuit la plus sombre prendra fin et le soleil se lévera." }
+  {
+    title: "Lettre de motivation",
+    content: "J'ai toujours été créative dès le plus jeune âge. D'abord une école d'informatique puis d'économie mais je ne me sentais pas à ma place. Au fil des années, j'ai appris à faire du montage vidéo, créer des sites, toucher à l'animation 3D etc. En août, j'apprends le SEO.\n\nC'était donc évident, je me devais d'aller en marketing. J'ai eu l'occasion de mettre en application toutes ces compétences mais aussi d'en acquérir d'autres lors de mon stage : indexation de pages, refonte de site, analyse de performance, création d'articles de blog et j'en passe.\n\nCe portfolio est l'occasion pour moi de vous présenter ma créativité digitale ainsi que mes projets."
+  },
+  {
+    title: "Livres que j'aime",
+    content: "- L'art subtil de s'en foutre\n- Don't believe everything you think\n- Atomic Habits\n- Arrêtez de vous saboter, vous êtes exceptionnel !"
+  },
+  {
+    title: "Coup de boost",
+    content: "- La douleur est indissociable de l'apprentissage.\n- Croire en soi, c'est déjà presque réussir.\n- Même la nuit la plus sombre prendra fin et le soleil se lèvera."
+  }
 ];
 
 let contextTarget = null;
 let currentNoteIndex = 0;
 
 // ══════════════════════════════════════════════════════
-// GESTION DES NOTES
-// ══════════════════════════════════════════════════════ 
+// NOTES
+// ══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderProjects();
+  selectNote(0);
+});
+
 function selectNote(index) {
   currentNoteIndex = index;
-  const note = notesData[index]; 
+  const note = notesData[index];
   document.getElementById('note-title').textContent = note.title;
   document.getElementById('note-content').value = note.content;
-  
   document.querySelectorAll('.notes-list-item').forEach((item, i) => {
-    if (i === index) item.classList.add('active');
-    else item.classList.remove('active');
+    item.classList.toggle('active', i === index);
   });
 }
 
@@ -556,9 +509,7 @@ function updateNoteContent(value) {
 // ══════════════════════════════════════════════════════
 // RENDU DES DOSSIERS
 // ══════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', renderProjects);
-
-function renderProjects() { 
+function renderProjects() {
   const grid = document.getElementById('projects-grid');
   grid.innerHTML = '';
   projectsData.forEach((project, idx) => {
@@ -567,22 +518,12 @@ function renderProjects() {
     el.dataset.idx = idx;
     el.innerHTML = `
       <div class="folder-icon">${project.icon}</div>
-      <div class="folder-name" id="fname-$${idx}">${project.title}</div> 
+      <div class="folder-name" id="fname-${idx}">${project.title}</div>
       <div class="folder-desc">${project.desc}</div>
     `;
-    el.addEventListener('dblclick', (e) => {
-      e.stopPropagation();
-      openFolder(idx);
-    });
-    el.querySelector('.folder-name').addEventListener('dblclick', (e) => {
-      e.stopPropagation();
-      startRename(idx);
-    });
-    el.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      showContextMenu(e.clientX, e.clientY, idx);
-    });
+    el.addEventListener('dblclick', (e) => { e.stopPropagation(); openFolder(idx); });
+    el.querySelector('.folder-name').addEventListener('dblclick', (e) => { e.stopPropagation(); startRename(idx); });
+    el.addEventListener('contextmenu', (e) => { e.preventDefault(); e.stopPropagation(); showContextMenu(e.clientX, e.clientY, idx); });
     grid.appendChild(el);
   });
 }
@@ -602,10 +543,8 @@ function openFolder(idx) {
     project.medias.forEach((media) => {
       const cell = document.createElement('div');
       cell.className = 'media-cell';
-
       const thumb = document.createElement('div');
-      thumb.className = 'media-thumb'; 
-
+      thumb.className = 'media-thumb';
       if (media.type === 'image') {
         const img = document.createElement('img');
         img.src = media.src;
@@ -617,17 +556,14 @@ function openFolder(idx) {
         thumb.innerHTML = '<span style="font-size:36px">🎬</span><div class="play-overlay">▶</div>';
         thumb.onclick = () => openLightboxVideo(media.src);
       }
-
       const label = document.createElement('div');
       label.className = 'media-label';
       label.textContent = media.label;
-
       cell.appendChild(thumb);
-      cell.appendChild(label);
+      cell.appendChild(label); 
       content.appendChild(cell);
     });
   }
-
   openWindow('win-media');
 }
 
@@ -669,7 +605,6 @@ function startRename(idx) {
   range.selectNodeContents(nameEl);
   window.getSelection().removeAllRanges();
   window.getSelection().addRange(range);
-
   function finish() {
     nameEl.contentEditable = 'false';
     const newName = nameEl.textContent.trim();
@@ -691,21 +626,18 @@ function startRename(idx) {
 // ══════════════════════════════════════════════════════
 function showContextMenu(x, y, idx) {
   contextTarget = idx;
-  const menu = document.getElementById('context-menu'); 
+  const menu = document.getElementById('context-menu');
   menu.style.display = 'block';
   const mw = 190, mh = 80;
   menu.style.left = (x + mw > window.innerWidth ? x - mw : x) + 'px';
   menu.style.top  = (y + mh > window.innerHeight ? y - mh : y) + 'px';
 }
-
 function hideContextMenu() {
   document.getElementById('context-menu').style.display = 'none';
   contextTarget = null;
 }
-
 function ctxOpen()   { if (contextTarget !== null) openFolder(contextTarget); hideContextMenu(); }
 function ctxRename() { if (contextTarget !== null) startRename(contextTarget); hideContextMenu(); }
-
 document.addEventListener('click', hideContextMenu);
 document.addEventListener('contextmenu', e => { if (!e.target.closest('.finder-folder')) hideContextMenu(); });
 
@@ -715,7 +647,7 @@ document.addEventListener('contextmenu', e => { if (!e.target.closest('.finder-f
 function openWindow(id) {
   const win = document.getElementById(id);
   win.classList.remove('active');
-  void win.offsetWidth; // reset animation
+  void win.offsetWidth;
   win.classList.add('active');
   bringToFront(win);
 }
