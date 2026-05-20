@@ -140,13 +140,6 @@
     padding: 8px 14px; background: rgba(240,240,240,0.8);
     border-bottom: 1px solid rgba(0,0,0,0.08); gap: 10px;
   }
-  .cv-download-btn {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--brown); color: white;
-    border: none; border-radius: 8px;
-    padding: 6px 14px; font-size: 12px; font-weight: 600;
-    cursor: pointer; font-family: 'DM Sans', sans-serif;
-    text-decoration: none; transition: opacity 0.2s;
   }
   .cv-download-btn:hover { opacity: 0.85; }
   .cv-frame { flex: 1; width: 100%; border: none; background: #f0f0f0; }
@@ -315,12 +308,6 @@
       <div style="width:42px"></div>
     </div>
     <div class="cv-content">
-      <div class="cv-toolbar">
-        <!-- Bouton télécharger -->
-        <a class="cv-download-btn" href="cv.pdf" download>
-          ⬇︎ Télécharger
-        </a>
-      </div>
       <!-- ↓ Le PDF s'affiche ici. Ton fichier doit s'appeler "cv.pdf" sur GitHub -->
       <iframe class="cv-frame" src="cv.pdf" title="CV Nour"></iframe>
     </div>
@@ -696,4 +683,4 @@ setInterval(updateClock, 1000);
 function toggleCheck(el) { el.classList.toggle('checked'); }
 </script>
 </body>
-</html> 
+</html>  
