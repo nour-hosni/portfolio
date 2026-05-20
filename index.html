@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nour — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #aeb784;
+    --brown: #582420;
+    --cream: #f5f0e8;
+    --light-green: #d4dab8;
+    --dark-brown: #3a1710;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    width: 100vw; height: 100vh;
+    overflow: hidden;
+    background: url('https://wallpapercave.com/wp/wp8095755.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    cursor: default;
+    user-select: none;
+  } 
+
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(0,0,0,0.05);
+    pointer-events: none; z-index: 0; 
+  }
+
+  /* MENU BAR */
+  .menubar {
+    position: fixed; top: 0; left: 0; right: 0; height: 28px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; z-index: 1000;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    font-family: 'SF Pro Display',-apple-system,sans-serif;
+    font-size: 13px; font-weight: 500;
+  }
+  .menubar-left { display: flex; align-items: center; gap: 18px; }
+  .menubar-app-name { font-weight: 700; }
+  .menubar-items { display: flex; gap: 18px; }
+  .menubar-items span { color: #333; cursor: pointer; }
+  .menubar-items span:hover { opacity: 0.7; }
+  .menubar-right { display: flex; align-items: center; gap: 14px; }
+  .menubar-right span { color: #333; }
+  #clock { font-weight: 500; }
+  
+  /* Bouton Centre de contrôle (SVG) */
+  .control-center-btn {
+    display: flex; align-items: center; justify-content: center; 
+    width: 20px; height: 20px; cursor: pointer; border-radius: 4px; margin-right: 4px;
+  }
+  .control-center-btn:hover { background: rgba(0,0,0,0.1); }
+  .cc-svg { width: 18px; height: 18px; fill: #333; }
+
+  /* Loupe (SVG) */
+  .search-icon {
+    width: 14px; height: 14px; fill: #333; 
+    display: flex; align-items: center; justify-content: center;
+  }
+  .search-icon svg { width: 100%; height: 100%; }
+
+  /* DESKTOP */
+  .desktop { position: relative; width: 100vw; height: 100vh; padding-top: 28px; z-index: 1; }
+
+  /* WINDOWS */
+  .window {
+    position: absolute;
+    background: #fff;
+    backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    cursor: move;
+    display: none;
+    flex-direction: column;
+    z-index: 100;
+  }
+  .window.active { display: flex; animation: windowOpen 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .window:hover { box-shadow: 0 30px 80px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2); }
+
+  .titlebar { display: flex; align-items: center; padding: 12px 14px 8px 14px; background: rgba(240,240,240,0.5); gap: 10px; cursor: grab; }
+  .titlebar:active { cursor: grabbing; }
+  .dots { display: flex; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; box-shadow: inset 0 -1px 1px rgba(0,0,0,0.1); }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
+  .window-title { font-size: 13px; font-weight: 600; color: #333; flex: 1; text-align: center; margin-right: 42px; }
+
+  /* TODO */
+  #win-todo { left: 50%; top: 100px; transform: translateX(-50%); width: 360px; height: 450px; }
+  .todo-content { padding: 0 24px 24px 24px; flex: 1; overflow-y: auto; }
+  .todo-header { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--brown); margin-bottom: 20px; line-height: 1.2; }
+  .todo-list { list-style: none; }
+  .todo-item { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; cursor: pointer; transition: opacity 0.2s; }
+  .todo-item:hover { opacity: 0.8; }
+  .checkbox { width: 18px; height: 18px; border: 2px solid #ccc; border-radius: 50%; margin-top: 2px; flex-shrink: 0; transition: all 0.2s; }
+  .todo-item.checked .checkbox { background: var(--green); border-color: var(--green); }
+  .todo-item.checked .todo-text { text-decoration: line-through; color: #aaa; }
+  .todo-text { font-size: 14px; color: #333; line-height: 1.4; }
+  .todo-footer { margin-top: 20px; padding: 12px; background: rgba(174,183,132,0.08); border-radius: 10px; font-size: 12px; color: #555; line-height: 1.5; border: 1px solid rgba(174,183,132,0.2); }
+  .todo-footer strong { color: var(--brown); }
+
+  /* FINDER */
+  #win-finder { left: 10%; top: 15%; width: 600px; height: 400px; }
+  .finder-layout { display: flex; height: 100%; }
+  .finder-sidebar { width: 140px; background: rgba(245,240,232,0.6); border-right: 1px solid rgba(174,183,132,0.2); padding: 15px 10px; font-size: 13px; color: #555; }
+  .finder-section-title { font-size: 11px; font-weight: 600; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; padding-left: 8px; }
+  .finder-item { padding: 6px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  .finder-item:hover, .finder-item.active { background: rgba(174,183,132,0.3); }
+  .finder-main { flex: 1; padding: 20px; background: rgba(255,255,255,0.8); overflow-y: auto; }
+  .finder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
+  .finder-folder { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; text-align: center; }
+  .finder-folder:hover { background: rgba(174,183,132,0.15); }
+  .finder-folder.selected { background: rgba(100,160,255,0.15); outline: 2px solid rgba(100,160,255,0.4); }
+  .folder-icon { font-size: 36px; }
+  .folder-name { font-size: 12px; color: #333; font-weight: 500; line-height: 1.2; word-break: break-word; border-radius: 3px; outline: none; }
+  .folder-name[contenteditable="true"] { background: #cce0ff; padding: 1px 4px; cursor: text; }
+  .folder-desc { font-size: 10px; color: #777; margin-top: 2px; }
+
+  /* FENÊTRE NOTES */
+  #win-notes { left: 15%; top: 12%; width: 750px; height: 500px; }
+  .notes-layout { display: flex; height: 100%; }
+  .notes-sidebar {
+    width: 200px;
+    background: rgba(245,240,232,0.6);
+    border-right: 1px solid rgba(174,183,132,0.2); 
+    padding: 10px;
+    overflow-y: auto;
+  }
+  .notes-list-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #333;
+    transition: background 0.2s;
+  }
+  .notes-list-item:hover { background: rgba(0,0,0,0.05); }
+  .notes-list-item.active { background: rgba(174,183,132,0.3); }
+  .notes-list-item strong { display: block; font-weight: 600; margin-bottom: 4px; }
+  .notes-list-item small { color: #888; font-size: 11px; }
+  .notes-editor {
+    flex: 1;
+    padding: 20px 30px;
+    background: #fff;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .notes-editor h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #333; margin-bottom: 15px; }
+  .notes-editor textarea {
+    flex: 1;
+    width: 100%;
+    border: none;
+    resize: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+    outline: none;
+  }
+  .notes-editor textarea::placeholder { color: #aaa; }
+
+  /* FENÊTRE MÉDIA */
+  #win-media { left: 18%; top: 8%; width: 700px; height: 480px; }
+  .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; padding: 20px; overflow-y: auto; flex: 1; background: #fafafa; align-content: start; }
+  .media-thumb {
+    border-radius: 10px; overflow: hidden; cursor: pointer;
+    background: #eee; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; transition: transform 0.15s;
+    border: 1px solid rgba(0,0,0,0.07);
+  }
+  .media-thumb:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+  .media-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .play-overlay { position: absolute; font-size: 28px; background: rgba(0,0,0,0.45); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: white; }
+  .media-label { font-size: 11px; color: #555; text-align: center; margin-top: 4px; }
+  .media-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+  /* LIGHTBOX */
+  #lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.88); z-index: 9999;
+    align-items: center; justify-content: center;
+  }
+  #lightbox.open { display: flex; }
+  #lightbox-close { position: absolute; top: 18px; right: 28px; color: #fff; font-size: 30px; cursor: pointer; line-height: 1; z-index: 10000; }
+  #lightbox-img { max-width: 90vw; max-height: 85vh; border-radius: 10px; display: none; object-fit: contain; }
+  #lightbox-vid { max-width: 90vw; max-height: 85vh; border-radius: 10px; display: none; }
+
+  /* MENU CONTEXTUEL */
+  #context-menu {
+    display: none; position: fixed;
+    background: rgba(246,246,246,0.97);
+    border: 1px solid rgba(0,0,0,0.14);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    z-index: 9998; min-width: 185px; padding: 4px 0;
+    font-size: 13px; font-family: 'SF Pro Display',-apple-system,sans-serif;
+  }
+  .ctx-item { padding: 7px 16px; cursor: pointer; color: #1a1a1a; }
+  .ctx-item:hover { background: rgba(0,100,255,0.1); }
+  .ctx-sep { height: 1px; background: rgba(0,0,0,0.1); margin: 3px 0; }
+
+  /* DESKTOP ICONS */
+  .desktop-icons { position: absolute; right: 20px; top: 60px; display: flex; flex-direction: column; gap: 20px; z-index: 50; align-items: center; }
+  .desktop-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; width: 70px; text-shadow: 0 1px 3px rgba(0,0,0,0.6); }
+  .desktop-icon:hover .icon-img { transform: scale(1.05); }
+  
+  .icon-img { 
+    width: 58px; height: 58px; 
+    border-radius: 14px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 28px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2); 
+    transition: transform 0.2s; 
+    background: none; 
+    overflow: hidden; 
+  }
+  
+  .icon-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    border-radius: 14px;
+  }
+
+  .icon-label { font-size: 11px; color: #fff; text-align: center; font-weight: 500; }
+
+  /* DOCK */
+  .dock {
+    position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px; padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+  }
+  .dock-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; position: relative; transition: transform 0.2s; }
+  .dock-item:hover { transform: scale(1.15) translateY(-8px); }
+  .dock-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); overflow: hidden; }
+  .dock-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .dock-tooltip { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); background: rgba(30,30,30,0.9); color: white; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s, top 0.2s; z-index: 2000; }
+  .dock-item:hover .dock-tooltip { opacity: 1; top: -45px; }
+
+  @keyframes windowOpen {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- MENU BAR -->
+<div class="menubar">
+  <div class="menubar-left">
+    <div class="menubar-app-name">Nour</div>
+    <div class="menubar-items">
+      <span>Fichier</span><span>Édition</span><span>Présentation</span><span>Aller</span><span>Fenêtre</span><span>Aide</span>
+    </div>
+  </div>
+  <div class="menubar-right">
+    <!-- Centre de contrôle SVG (Ouvre les Notes) -->
+    <div class="control-center-btn" onclick="openWindow('win-notes')" title="Centre de contrôle">
+      <svg class="cc-svg" viewBox="0 0 24 24">
+        <path d="M12,2C13.1,2 14,2.9 14,4C14,5.1 13.1,6 12,6C10.9,6 10,5.1 10,4C10,2.9 10.9,2 12,2M12,8C10.9,8 10,8.9 10,10C10,11.1 10.9,12 12,12C13.1,12 14,11.1 14,10C14,8.9 13.1,8 12,8M12,14C10.9,14 10,14.9 10,16C10,17.1 10.9,18 12,18C13.1,18 14,17.1 14,16C14,14.9 13.1,14 12,14Z" />
+      </svg>
+    </div>
+    <!-- Loupe SVG -->
+    <div class="search-icon" title="Recherche">
+      <svg viewBox="0 0 24 24">
+        <path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+      </svg>
+    </div>
+    <span id="clock"></span>
+  </div>
+</div>
+
+<div class="desktop">
+
+  <!-- TODO WINDOW -->
+  <div class="window active" id="win-todo">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red" onclick="closeWindow('win-todo')"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="window-title">Rappels</div>
+      <div style="width:42px"></div>
+    </div>
+    <div class="todo-content">
+      <div class="todo-header">To-do list du jour ✰</div>
+      <ul class="todo-list">
+        <li class="todo-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="todo-text">Regarder mon CV</div></li>
+        <li class="todo-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="todo-text">Ouvrir le dossier "Mes projets"</div></li>
+        <li class="todo-item" onclick="toggleCheck(this)"><div class="checkbox"></div><div class="todo-text">Fouiller les notes</div></li>
+      </ul>
+      <div class="todo-footer">
+        <strong>Bienvenue sur mon portfolio!</strong> Cochez les cases au fur et à mesure de votre découverte.<br>Amusez-vous bien :)
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES WINDOW (NOUVEAU) -->
+  <div class="window" id="win-notes">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red" onclick="closeWindow('win-notes')"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="window-title">Notes</div>
+      <div style="width:42px"></div>
+    </div>
+    <div class="notes-layout">
+      <div class="notes-sidebar">
+        <div class="notes-list-item active" onclick="selectNote(0)"> 
+          <strong>Lettre de motivation </strong>
+          <small>Aujourd'hui, 10:00</small>
+        </div>
+        <div class="notes-list-item" onclick="selectNote(1)">
+          <strong>Livres que j'aime</strong>
+          <small>Hier, 14:30</small> 
+        </div>
+        <div class="notes-list-item" onclick="selectNote(2)">
+          <strong>Coup de boost</strong>
+          <small>20 mai 2025</small>
+        </div> 
+      </div>
+      <div class="notes-editor">
+        <h2 id="note-title">Lettre de motivation </h2>
+        <textarea id="note-content" oninput="updateNoteContent(this.value)">
+J'ai toujours été créative dès le plus jeune âge. D'abord une école d'informatique puis d'économie mais je ne me sentais pas à ma place. Au fil des années, j'ai appris à faire du montage vidéo, créer des sites, toucher à l'animation 3D etc. En août, j'apprends le SEO. 
+
+C'était donc évident, je me devais d'aller en marketing. J'ai eu l'occassion de mettre en application toutes ces compétences mais aussi d'en acquérir d'autres lors de mon stage: indexation de pages, refonte de site, analyse de performange, création d'articles de blog et j'en passe. 
+
+Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale ainsi que mes projets. 
+        </textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINDER WINDOW -->
+  <div class="window" id="win-finder">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red" onclick="closeWindow('win-finder')"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="window-title">Finder — Mes Projets</div>
+      <div style="width:42px"></div>
+    </div>
+    <div class="finder-layout">
+      <div class="finder-sidebar">
+        <div class="finder-section-title">Favoris</div>
+        <div class="finder-item active"><span>🗂️</span> Projets</div>
+      </div>
+      <div class="finder-main">
+        <div class="finder-grid" id="projects-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FENÊTRE MÉDIA -->
+  <div class="window" id="win-media">
+    <div class="titlebar">
+      <div class="dots">
+        <div class="dot red" onclick="closeWindow('win-media')"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="window-title" id="media-win-title">Dossier</div>
+      <div style="width:42px"></div>
+    </div>
+    <div class="media-grid" id="media-content"></div>
+  </div>
+
+  <!-- DESKTOP ICONS (PAS DE NOTE ICI) -->
+  <div class="desktop-icons">
+    <!-- Icône Rappel -->
+    <div class="desktop-icon" ondblclick="openWindow('win-todo')">
+      <div class="icon-img">
+        <img src="https://i.pinimg.com/736x/0e/72/b8/0e72b856f364f2d69422c01f1b594ea6.jpg" alt="Rappel">
+      </div>
+      <div class="icon-label">Rappel</div>
+    </div>
+    
+    <!-- Icône Mes Projets -->
+    <div class="desktop-icon" ondblclick="openWindow('win-finder')">
+      <div class="icon-img">
+        <img src="https://i.pinimg.com/736x/7a/4f/30/7a4f300957d3e50ad5c4a448eba8843b.jpg" alt="Projets">
+      </div>
+      <div class="icon-label">Mes<br>Projets</div>
+    </div> 
+
+    <!-- Icône CV -->
+    <div class="desktop-icon">
+      <div class="icon-img">
+        <img src="https://i.imgur.com/vK022ow_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="CV">
+      </div>
+      <div class="icon-label">CV</div>
+    </div>
+  </div>
+
+</div><!-- /desktop -->
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <div id="lightbox-close" onclick="closeLightbox()">✕</div>
+  <img id="lightbox-img" src="" alt="">
+  <video id="lightbox-vid" controls></video>
+</div>
+
+<!-- MENU CONTEXTUEL -->
+<div id="context-menu">
+  <div class="ctx-item" onclick="ctxOpen()">📂 &nbsp;Ouvrir</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="ctxRename()">✏️ &nbsp;Renommer</div>
+</div> 
+
+<!-- DOCK -->
+<div class="dock">
+  <div class="dock-item" ondblclick="openWindow('win-finder')">
+    <div class="dock-icon"><img src="https://i.imgur.com/dc34cbw.jpeg" alt="Finder"></div>
+    <div class="dock-tooltip">Finder</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.imgur.com/c5JYSCr.png" alt="Messages"></div>
+    <div class="dock-tooltip">Messages</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.imgur.com/RFDkqAZ.jpeg" alt="FaceTime"></div>
+    <div class="dock-tooltip">FaceTime</div>
+  </div>
+  <!-- CORRECTION ICI : Ajout de ondblclick="openWindow('win-notes')" -->
+  <div class="dock-item" ondblclick="openWindow('win-notes')">
+    <div class="dock-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_Notes_icon.svg/3840px-Apple_Notes_icon.svg.png" alt="Notes"></div>
+    <div class="dock-tooltip">Notes</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.pinimg.com/1200x/71/6d/9a/716d9a1837c24f1145e8d35c49e56191.jpg" alt="Nour"></div>
+    <div class="dock-tooltip">Nour</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.imgur.com/k0HwEH0.png" alt="Chrome"></div>
+    <div class="dock-tooltip">Chrome</div>
+  </div>
+  <div class="dock-item"> 
+    <div class="dock-icon" style="background:#0a66c2;color:white;font-weight:bold;font-size:20px;">in</div>
+    <div class="dock-tooltip">LinkedIn</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.imgur.com/JOj1KEl.png" alt="App Store"></div>
+    <div class="dock-tooltip">Photos</div>
+  </div>
+  <div class="dock-item">
+    <div class="dock-icon"><img src="https://i.imgur.com/21J7Me4.png" alt="Corbeille"></div>
+    <div class="dock-tooltip">Corbeille</div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DONNÉES DES PROJETS
+// ══════════════════════════════════════════════════════
+const projectsData = [
+  { 
+    icon: "🧸",
+    title: "Tanddem",
+    desc: "SEO & Rebranding",
+    medias: [
+      { type: "image", src: "https://i.imgur.com/eGqtyWt_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Hero: Avant rebranding" },
+      { type: "image", src: "https://i.imgur.com/imITECt_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Nos services: Avant rebranding" },
+      { type: "image", src: "https://i.imgur.com/1EHCUka_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Hero: Après rebranding" },
+      { type: "image", src: "https://i.imgur.com/5LVv34k_d.png?maxwidth=520&shape=thumb&fidelity=high",  label: "Nos services: Après rebranding" },
+      { type: "video", src: "https://i.imgur.com/KBqxTtl_lq.mp4",  label: "Responsive site internet mobile " },
+    ]
+  },
+  {
+    icon: "🌸", 
+    title: "Mademoiselle Musc",
+    desc: "Shopify Design",
+    medias: [
+      { type: "video", src: "https://i.imgur.com/WWLNEEs_lq.mp4",  label: "Démo mobile" }, 
+    ]
+  },
+  {
+    icon: "📂",
+    title: "Autres",
+    desc: "Invitations & Projets fictifs",
+    medias: [
+      { type: "image", src: "https://i.imgur.com/jHZ4ih8_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "New drop" },
+      { type: "image", src: "https://i.imgur.com/yYEb9G6_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "Coming soon" },
+      { type: "image", src: "https://i.imgur.com/rHNsQWo_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Customer's choice" },
+      { type: "image", src: "https://i.imgur.com/Sb3esJ0_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Get the look" },
+      { type: "image", src: "https://i.imgur.com/5sZQbuW_d.png?maxwidth=520&shape=thumb&fidelity=highh", label: "EVJF summer" },
+      { type: "image", src: "https://i.imgur.com/D0l5jmB_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "EVJF chrome " },
+      { type: "image", src: "https://i.imgur.com/dSL2cdi_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Babyshower" },
+      { type: "image", src: "https://i.imgur.com/CIfF1po_d.png?maxwidth=520&shape=thumb&fidelity=high", label: "Baptême" },
+      { type: "video", src: "https://i.imgur.com/Lph2FeQ_lq.mp4", label: "Projet fictif" },
+      { type: "video", src: "https://i.imgur.com/1LRtj5K_lq.mp4", label: "Huda Beauty" },
+      { type: "video", src: "https://i.imgur.com/nOma0SA_lq.mp4", label: "Invitation maroc " }, 
+      { type: "video", src: "https://i.imgur.com/lWAfR4b_lq.mp4", label: "Invitation tunisie " }, 
+      { type: "video", src: "https://i.imgur.com/oRbRKBR_lq.mp4", label: "Invitation henna day " }, 
+      { type: "video", src: "https://i.imgur.com/ZBitM59_lq.mp4", label: "Invitation florale " }, 
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════════════
+// DONNÉES DES NOTES
+// ══════════════════════════════════════════════════════
+const notesData = [
+  { title: "Lettre de motivation", content: "J'ai toujours été créative dès le plus jeune âge. D'abord une école d'informatique puis d'économie mais je ne me sentais pas à ma place. Au fil des années, j'ai appris à faire du montage vidéo, créer des sites, toucher à l'animation 3D etc. En août, j'apprends le SEO. C'était donc évident, je me devais d'aller en marketing. J'ai eu l'occassion de mettre en application toutes ces compétences mais aussi d'en acquérir d'autres lors de mon stage: indexation de pages, refonte de site, analyse de performange, création d'articles de blog et j'en passe. Ce portfolio est l'occasion pour moi de vous présenter ma créativité digitale ainsi que mes projets. " },
+  { title: "Livres que j'aime", content: "- L'art subtil de s'en foutre\n- Don't believe everything you think\n- Atomic Habits\n- Arrêtez de vous saboter, vous êtes exceptionnel !" },
+  { title: "Coup de boost", content: "-La douleur est indissociable de l'apprentissage.\n- Croire en soi, c'est déjà presque réussir.\n- Même la nuit la plus sombre prendra fin et le soleil se lévera." }
+];
+
+let contextTarget = null;
+let currentNoteIndex = 0;
+
+// ══════════════════════════════════════════════════════
+// GESTION DES NOTES
+// ══════════════════════════════════════════════════════ 
+function selectNote(index) {
+  currentNoteIndex = index;
+  const note = notesData[index]; 
+  document.getElementById('note-title').textContent = note.title;
+  document.getElementById('note-content').value = note.content;
+  
+  document.querySelectorAll('.notes-list-item').forEach((item, i) => {
+    if (i === index) item.classList.add('active');
+    else item.classList.remove('active');
+  });
+}
+
+function updateNoteContent(value) {
+  notesData[currentNoteIndex].content = value;
+}
+
+// ══════════════════════════════════════════════════════
+// RENDU DES DOSSIERS
+// ══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', renderProjects);
+
+function renderProjects() { 
+  const grid = document.getElementById('projects-grid');
+  grid.innerHTML = '';
+  projectsData.forEach((project, idx) => {
+    const el = document.createElement('div');
+    el.className = 'finder-folder';
+    el.dataset.idx = idx;
+    el.innerHTML = `
+      <div class="folder-icon">${project.icon}</div>
+      <div class="folder-name" id="fname-$${idx}">${project.title}</div> 
+      <div class="folder-desc">${project.desc}</div>
+    `;
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      openFolder(idx);
+    });
+    el.querySelector('.folder-name').addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      startRename(idx);
+    });
+    el.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      showContextMenu(e.clientX, e.clientY, idx);
+    });
+    grid.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// OUVRIR UN DOSSIER
+// ══════════════════════════════════════════════════════
+function openFolder(idx) {
+  const project = projectsData[idx];
+  document.getElementById('media-win-title').textContent = project.title;
+  const content = document.getElementById('media-content');
+  content.innerHTML = '';
+
+  if (!project.medias || project.medias.length === 0) {
+    content.innerHTML = '<p style="color:#aaa;font-size:13px;padding:10px;">Aucun fichier dans ce dossier.</p>';
+  } else {
+    project.medias.forEach((media) => {
+      const cell = document.createElement('div');
+      cell.className = 'media-cell';
+
+      const thumb = document.createElement('div');
+      thumb.className = 'media-thumb'; 
+
+      if (media.type === 'image') {
+        const img = document.createElement('img');
+        img.src = media.src;
+        img.alt = media.label;
+        img.onerror = () => { thumb.innerHTML = '<span style="font-size:36px">🖼️</span>'; };
+        thumb.appendChild(img);
+        thumb.onclick = () => openLightboxImage(media.src);
+      } else {
+        thumb.innerHTML = '<span style="font-size:36px">🎬</span><div class="play-overlay">▶</div>';
+        thumb.onclick = () => openLightboxVideo(media.src);
+      }
+
+      const label = document.createElement('div');
+      label.className = 'media-label';
+      label.textContent = media.label;
+
+      cell.appendChild(thumb);
+      cell.appendChild(label);
+      content.appendChild(cell);
+    });
+  }
+
+  openWindow('win-media');
+}
+
+// ══════════════════════════════════════════════════════
+// LIGHTBOX
+// ══════════════════════════════════════════════════════
+function openLightboxImage(src) {
+  const vid = document.getElementById('lightbox-vid');
+  vid.pause(); vid.style.display = 'none';
+  const img = document.getElementById('lightbox-img');
+  img.src = src; img.style.display = 'block';
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function openLightboxVideo(src) {
+  document.getElementById('lightbox-img').style.display = 'none';
+  const vid = document.getElementById('lightbox-vid');
+  vid.src = src; vid.style.display = 'block';
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  const vid = document.getElementById('lightbox-vid');
+  vid.pause(); vid.src = '';
+  document.getElementById('lightbox-img').src = '';
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ══════════════════════════════════════════════════════
+// RENOMMER
+// ══════════════════════════════════════════════════════
+function startRename(idx) {
+  const nameEl = document.getElementById(`fname-${idx}`);
+  nameEl.contentEditable = 'true';
+  nameEl.focus();
+  const range = document.createRange();
+  range.selectNodeContents(nameEl);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+
+  function finish() {
+    nameEl.contentEditable = 'false';
+    const newName = nameEl.textContent.trim();
+    projectsData[idx].title = newName || projectsData[idx].title;
+    nameEl.textContent = projectsData[idx].title;
+    nameEl.removeEventListener('blur', finish);
+    nameEl.removeEventListener('keydown', onKey);
+  }
+  function onKey(e) {
+    if (e.key === 'Enter') { e.preventDefault(); nameEl.blur(); }
+    if (e.key === 'Escape') { nameEl.textContent = projectsData[idx].title; nameEl.blur(); }
+  }
+  nameEl.addEventListener('blur', finish);
+  nameEl.addEventListener('keydown', onKey);
+}
+
+// ══════════════════════════════════════════════════════
+// MENU CONTEXTUEL
+// ══════════════════════════════════════════════════════
+function showContextMenu(x, y, idx) {
+  contextTarget = idx;
+  const menu = document.getElementById('context-menu'); 
+  menu.style.display = 'block';
+  const mw = 190, mh = 80;
+  menu.style.left = (x + mw > window.innerWidth ? x - mw : x) + 'px';
+  menu.style.top  = (y + mh > window.innerHeight ? y - mh : y) + 'px';
+}
+
+function hideContextMenu() {
+  document.getElementById('context-menu').style.display = 'none';
+  contextTarget = null;
+}
+
+function ctxOpen()   { if (contextTarget !== null) openFolder(contextTarget); hideContextMenu(); }
+function ctxRename() { if (contextTarget !== null) startRename(contextTarget); hideContextMenu(); }
+
+document.addEventListener('click', hideContextMenu);
+document.addEventListener('contextmenu', e => { if (!e.target.closest('.finder-folder')) hideContextMenu(); });
+
+// ══════════════════════════════════════════════════════
+// GESTION DES FENÊTRES
+// ══════════════════════════════════════════════════════
+function openWindow(id) {
+  const win = document.getElementById(id);
+  win.classList.remove('active');
+  void win.offsetWidth; // reset animation
+  win.classList.add('active');
+  bringToFront(win);
+}
+function closeWindow(id) { document.getElementById(id).classList.remove('active'); }
+function bringToFront(win) {
+  let z = 100;
+  document.querySelectorAll('.window').forEach(w => w.style.zIndex = ++z);
+  win.style.zIndex = 200;
+}
+
+// ══════════════════════════════════════════════════════
+// DRAG & DROP
+// ══════════════════════════════════════════════════════
+let dragWin = null, dragOx = 0, dragOy = 0;
+document.querySelectorAll('.window').forEach(win => {
+  win.querySelector('.titlebar').addEventListener('mousedown', e => {
+    if (e.target.classList.contains('dot')) return;
+    dragWin = win;
+    dragOx = e.clientX - win.offsetLeft;
+    dragOy = e.clientY - win.offsetTop;
+    bringToFront(win);
+  });
+  win.addEventListener('mousedown', () => bringToFront(win));
+});
+document.addEventListener('mousemove', e => {
+  if (!dragWin) return;
+  dragWin.style.left = (e.clientX - dragOx) + 'px';
+  dragWin.style.top  = (e.clientY - dragOy) + 'px';
+});
+document.addEventListener('mouseup', () => dragWin = null);
+
+// ══════════════════════════════════════════════════════
+// HORLOGE
+// ══════════════════════════════════════════════════════
+function updateClock() {
+  const now = new Date();
+  const days   = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
+  const months = ['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'];
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('clock').textContent = `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${h}:${m}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+function toggleCheck(el) { el.classList.toggle('checked'); }
+</script>
+</body>
+</html> 
