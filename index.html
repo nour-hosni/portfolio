@@ -315,7 +315,7 @@
       <div style="width:42px"></div>
     </div>
     <div class="cv-content">
-      <!--  Le PDF s'affiche ici. !Le fichier doit s'appeler "cv.pdf"  -->
+      <!-- ↓ Le PDF s'affiche ici. Ton fichier doit s'appeler "cv.pdf" sur GitHub -->
       <iframe class="cv-frame" src="cv.pdf" title="CV Nour"></iframe>
     </div>
   </div>
@@ -344,7 +344,7 @@
       <div class="icon-img"><img src="https://i.pinimg.com/736x/7a/4f/30/7a4f300957d3e50ad5c4a448eba8843b.jpg" alt="Projets"></div>
       <div class="icon-label">Mes<br>Projets</div>
     </div>
-    <!--  Double-clic ouvre la fenêtre CV -->
+    <!-- ↓ Double-clic ouvre la fenêtre CV -->
     <div class="desktop-icon" ondblclick="openWindow('win-cv')">
       <div class="icon-img"><img src="https://i.imgur.com/vK022ow_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="CV"></div>
       <div class="icon-label">CV</div>
@@ -413,7 +413,17 @@
 // ══════════════════════════════════════════════════════
 const projectsData = [
   {
-    icon: "🧸",
+    icon: "📜",
+    title: "Certifications",
+    desc: "Marketing digital",
+    medias: [
+      { type: "image", src: "https://i.imgur.com/lr4iU6t_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "SEO " },
+      { type: "image", src: "https://i.imgur.com/kiWdPLX_d.jpeg?maxwidth=520&shape=thumb&fidelity=high", label: "Les fondements du marketing digital" },
+      { type: "image", src: "https://media.licdn.com/dms/image/v2/D4D22AQErLdCYeJ2kCw/feedshare-shrink_1280/B4DZywJ6PIIUAc-/0/1772481914093?e=1779380727&v=beta&t=SOwbyHvTAI1Dib-Vxk_zRzcY8Smn9xLYhugK2XaFhhY", label: "Anglais des affaires" },
+    ]
+  },
+  {
+    icon: "🌙",
     title: "Tanddem",
     desc: "SEO & Rebranding",
     medias: [
@@ -425,7 +435,7 @@ const projectsData = [
     ]
   },
   {
-    icon: "🌸",
+    icon: "🍰", 
     title: "Mademoiselle Musc",
     desc: "Shopify Design",
     medias: [
@@ -435,7 +445,7 @@ const projectsData = [
     ]
   },
   {
-    icon: "📂",
+    icon: "🐈‍⬛",
     title: "Autres",
     desc: "Invitations & Projets fictifs",
     medias: [
